@@ -9,9 +9,10 @@ export default function AddUser() {
     name: "",
     username: "",
     email: "",
+    departement: "",
   });
 
-  const { name, username, email } = user;
+  const { name, username, email, departement } = user;
 
   const onInputChange = (e) => {
     setUser({ ...user, [e.target.name]: e.target.value });
@@ -66,6 +67,19 @@ export default function AddUser() {
                 placeholder="Enter your e-mail address"
                 name="email"
                 value={email}
+                onChange={(e) => onInputChange(e)}
+              />
+            </div>
+            <div className="mb-3">
+              <label htmlFor="Departement" className="form-label">
+                Departement
+              </label>
+              <input
+                type={"text"}
+                className="form-control"
+                placeholder="Enter your Departement"
+                name="departement"
+                value={departement}
                 onChange={(e) => onInputChange(e)}
               />
             </div>

@@ -31,6 +31,7 @@ export default function Home() {
               <th scope="col">Name</th>
               <th scope="col">Username</th>
               <th scope="col">Email</th>
+              <th scope="col">Departement</th>
               <th scope="col">Action</th>
             </tr>
           </thead>
@@ -43,6 +44,7 @@ export default function Home() {
                 <td>{user.name}</td>
                 <td>{user.username}</td>
                 <td>{user.email}</td>
+                <td>{user.departement}</td>
                 <td>
                   <Link
                     className="btn btn-primary mx-2"

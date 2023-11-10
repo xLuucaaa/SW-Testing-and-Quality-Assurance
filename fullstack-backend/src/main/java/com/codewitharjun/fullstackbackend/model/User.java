@@ -14,6 +14,17 @@ public class User {
     private String username;
     private String name;
     private String email;
+    private String departement;
+    public String getDepartement() {
+        return departement;
+    }
+
+    public void setDepartement(String departement) {
+        this.departement = departement;
+    }
+
+
+
 
     public Long getId() {
         return id;
