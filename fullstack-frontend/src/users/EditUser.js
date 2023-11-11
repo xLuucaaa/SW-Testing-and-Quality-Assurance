@@ -88,7 +88,7 @@ export default function EditUser() {
               <input
                 type={"text"}
                 className="form-control"
-                placeholder="Enter your departement"
+                placeholder="Enter your department"
                 name="department"
                 value={department}
                 onChange={(e) => onInputChange(e)}

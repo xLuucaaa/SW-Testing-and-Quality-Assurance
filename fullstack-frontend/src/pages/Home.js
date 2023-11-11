@@ -44,7 +44,7 @@ export default function Home() {
                 <td>{user.name}</td>
                 <td>{user.username}</td>
                 <td>{user.email}</td>
-                <td>{user.departement}</td>
+                <td>{user.department}</td>
                 <td>
                   <Link
                     className="btn btn-primary mx-2"
