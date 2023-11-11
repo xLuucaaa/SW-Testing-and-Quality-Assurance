@@ -7,7 +7,6 @@ import javax.persistence.Id;
 /* Created by Arjun Gautam */
 @Entity
 public class User {
-
     @Id
     @GeneratedValue
     private Long id;
@@ -15,14 +14,6 @@ public class User {
     private String name;
     private String email;
     private String department;
-
-    public String getDepartment() {
-        return department;
-    }
-
-    public void setDepartment(String department) {
-        this.department = department;
-    }
 
     public Long getId() {
         return id;
@@ -54,5 +45,13 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(String department) {
+        this.department = department;
     }
 }
