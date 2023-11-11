@@ -9,10 +9,10 @@ export default function AddUser() {
     name: "",
     username: "",
     email: "",
-    departement: "",
+    department: "",
   });
 
-  const { name, username, email, departement } = user;
+  const { name, username, email, department } = user;
 
   const onInputChange = (e) => {
     setUser({ ...user, [e.target.name]: e.target.value });
@@ -71,15 +71,15 @@ export default function AddUser() {
               />
             </div>
             <div className="mb-3">
-              <label htmlFor="Departement" className="form-label">
-                Departement
+              <label htmlFor="Department" className="form-label">
+                Department
               </label>
               <input
                 type={"text"}
                 className="form-control"
                 placeholder="Enter your Departement"
-                name="departement"
-                value={departement}
+                name="department"
+                value={department}
                 onChange={(e) => onInputChange(e)}
               />
             </div>

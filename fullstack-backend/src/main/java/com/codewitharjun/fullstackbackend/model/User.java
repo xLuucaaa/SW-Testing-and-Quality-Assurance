@@ -14,17 +14,15 @@ public class User {
     private String username;
     private String name;
     private String email;
-    private String departement;
-    public String getDepartement() {
-        return departement;
+    private String department;
+
+    public String getDepartment() {
+        return department;
     }
 
-    public void setDepartement(String departement) {
-        this.departement = departement;
+    public void setDepartment(String department) {
+        this.department = department;
     }
-
-
-
 
     public Long getId() {
         return id;
