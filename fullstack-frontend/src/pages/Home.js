@@ -31,7 +31,7 @@ export default function Home() {
               <th scope="col">Name</th>
               <th scope="col">Username</th>
               <th scope="col">Email</th>
-              <th scope="col">Departement</th>
+              <th scope="col">Department</th>
               <th scope="col">Action</th>
             </tr>
           </thead>
