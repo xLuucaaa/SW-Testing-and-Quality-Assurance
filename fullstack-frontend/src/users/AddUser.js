@@ -77,7 +77,7 @@ export default function AddUser() {
               <input
                 type={"text"}
                 className="form-control"
-                placeholder="Enter your Departement"
+                placeholder="Enter your Department"
                 name="department"
                 value={department}
                 onChange={(e) => onInputChange(e)}
