@@ -3,6 +3,7 @@ package com.codewitharjun.fullstackbackend.model;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import java.util.regex.*;
 
 /* Created by Arjun Gautam */
 @Entity
@@ -44,7 +45,9 @@ public class User {
     }
 
     public void setEmail(String email) {
-        this.email = email;
+        if (isValidEmail(email)) {
+            this.email = email;
+        }
     }
 
     public String getDepartment() {
@@ -53,5 +56,12 @@ public class User {
 
     public void setDepartment(String department) {
         this.department = department;
+    }
+
+    private static final Pattern VALID_EMAIL_REGEX =
+        Pattern.compile("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,7}$", Pattern.CASE_INSENSITIVE);
+
+    private boolean isValidEmail(String email) {
+        return VALID_EMAIL_REGEX.matcher(email).matches();
     }
 }

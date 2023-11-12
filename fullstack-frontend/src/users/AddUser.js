@@ -1,6 +1,7 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { VALID_EMAIL_REGEX, INVALID_EMAIL_ERR_MSG } from "../Constants";
 
 export default function AddUser() {
   let navigate = useNavigate();
@@ -18,8 +19,26 @@ export default function AddUser() {
     setUser({ ...user, [e.target.name]: e.target.value });
   };
 
+  const [emailError, setEmailError] = useState("");
+
+  useEffect(() => {
+    if (user.email) {
+      validateEmail();
+    }
+  }, [user.email]);
+
+  const validateEmail = () => {
+    setEmailError(VALID_EMAIL_REGEX.test(email) ? "" : INVALID_EMAIL_ERR_MSG);
+  };
+
   const onSubmit = async (e) => {
     e.preventDefault();
+
+    validateEmail();
+    if (emailError) {
+      return;
+    }
+
     await axios.post("http://localhost:8080/user", user);
     navigate("/");
   };
@@ -63,12 +82,21 @@ export default function AddUser() {
               </label>
               <input
                 type={"text"}
-                className="form-control"
+                className={`form-control ${
+                  !emailError && email !== ""
+                    ? "is-valid"
+                    : emailError
+                    ? "is-invalid"
+                    : ""
+                }`}
                 placeholder="Enter your e-mail address"
                 name="email"
                 value={email}
                 onChange={(e) => onInputChange(e)}
               />
+              {emailError && (
+                <div className="invalid-feedback">{emailError}</div>
+              )}
             </div>
             <div className="mb-3">
               <label htmlFor="Department" className="form-label">
