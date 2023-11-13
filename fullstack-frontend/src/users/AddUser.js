@@ -14,11 +14,15 @@ export default function AddUser() {
 
   const { name, username, email, department } = user;
 
+
   const onInputChange = (e) => {
+
     setUser({ ...user, [e.target.name]: e.target.value });
   };
 
   const onSubmit = async (e) => {
+    console.log(e);
+
     e.preventDefault();
     await axios.post("http://localhost:8080/user", user);
     navigate("/");
