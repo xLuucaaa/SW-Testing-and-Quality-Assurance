@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { VALID_EMAIL_REGEX, INVALID_EMAIL_ERR_MSG } from "../Constants";
+import { VALID_EMAIL_REGEX, INVALID_EMAIL_ERR_MSG } from "../constants/Constants.js";
 
 export default function AddUser() {
   let navigate = useNavigate();
