@@ -6,6 +6,7 @@ import { VALID_EMAIL_REGEX, INVALID_EMAIL_ERR_MSG } from "../constants/Constants
 export default function AddUser() {
   let navigate = useNavigate();
 
+  const [emailError, setEmailError] = useState("");
   const [user, setUser] = useState({
     name: "",
     username: "",
@@ -19,7 +20,6 @@ export default function AddUser() {
     setUser({ ...user, [e.target.name]: e.target.value });
   };
 
-  const [emailError, setEmailError] = useState("");
 
   useEffect(() => {
     if (user.email) {
@@ -59,6 +59,7 @@ export default function AddUser() {
                 className="form-control"
                 placeholder="Enter your name"
                 name="name"
+                required
                 value={name}
                 onChange={(e) => onInputChange(e)}
               />
@@ -72,6 +73,7 @@ export default function AddUser() {
                 className="form-control"
                 placeholder="Enter your username"
                 name="username"
+                required
                 value={username}
                 onChange={(e) => onInputChange(e)}
               />
@@ -91,6 +93,7 @@ export default function AddUser() {
                 }`}
                 placeholder="Enter your e-mail address"
                 name="email"
+                required
                 value={email}
                 onChange={(e) => onInputChange(e)}
               />
@@ -107,6 +110,7 @@ export default function AddUser() {
                 className="form-control"
                 placeholder="Enter your Department"
                 name="department"
+                required
                 value={department}
                 onChange={(e) => onInputChange(e)}
               />
