@@ -31,7 +31,7 @@ export default function Home() {
         <InputGroup>
           <Form.Control 
             onChange={(e) =>setSearch(e.target.value)} 
-            placeholder="Search for a name"/>
+            placeholder="Search for a name, username, email or departement"/>
         </InputGroup>
         <table className="table border shadow">
           <thead>
