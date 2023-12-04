@@ -1,9 +1,12 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link, useParams } from "react-router-dom";
+import InputGroup from "react-bootstrap/InputGroup";
+import Form from "react-bootstrap/Form";
 
 export default function Home() {
   const [users, setUsers] = useState([]);
+  const [search, setSearch] = useState("");
 
   const { id } = useParams();
 
@@ -22,8 +25,14 @@ export default function Home() {
   };
 
   return (
+    
     <div className="container">
       <div className="py-4">
+        <InputGroup>
+          <Form.Control 
+            onChange={(e) =>setSearch(e.target.value)} 
+            placeholder="Search for a name"/>
+        </InputGroup>
         <table className="table border shadow">
           <thead>
             <tr>
@@ -36,7 +45,9 @@ export default function Home() {
             </tr>
           </thead>
           <tbody>
-            {users.map((user, index) => (
+            {users.filter((filteredUser) =>{
+              return search === "" ? filteredUser : filteredUser.name.includes(search);
+            }).map((user, index) => (
               <tr>
                 <th scope="row" key={index}>
                   {index + 1}
