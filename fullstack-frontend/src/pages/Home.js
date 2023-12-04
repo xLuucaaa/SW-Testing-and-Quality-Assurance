@@ -45,8 +45,16 @@ export default function Home() {
             </tr>
           </thead>
           <tbody>
-            {users.filter((filteredUser) =>{
-              return search === "" ? filteredUser : filteredUser.name.includes(search);
+          {users
+              .filter((filteredUser) => {
+                const searchTerm = search.trim().toLowerCase();
+                return (
+                  searchTerm === "" ||
+                  filteredUser.name.toLowerCase().includes(searchTerm) ||
+                  filteredUser.username.toLowerCase().includes(searchTerm) ||
+                  filteredUser.email.toLowerCase().includes(searchTerm) ||
+                  filteredUser.department.toLowerCase().includes(searchTerm)
+                );
             }).map((user, index) => (
               <tr>
                 <th scope="row" key={index}>
