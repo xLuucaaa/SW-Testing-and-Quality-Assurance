@@ -5,7 +5,7 @@ import { VALID_EMAIL_REGEX, INVALID_EMAIL_ERR_MSG } from "../constants/Constants
 
 export default function AddUser() {
   let navigate = useNavigate();
-  
+
   const [emailError, setEmailError] = useState("");
   const [user, setUser] = useState({
     name: "",
