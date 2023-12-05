@@ -1,9 +1,13 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link, useParams } from "react-router-dom";
+import InputGroup from "react-bootstrap/InputGroup";
+import Form from "react-bootstrap/Form";
 
 export default function Home() {
   const [users, setUsers] = useState([]);
+  const [search, setSearch] = useState("");
+  const [filterCriteria, setFilterCriteria] = useState("name"); 
 
   const { id } = useParams();
 
@@ -24,6 +28,18 @@ export default function Home() {
   return (
     <div className="container">
       <div className="py-4">
+        <InputGroup>
+          <Form.Control 
+            onChange={(e) => setSearch(e.target.value.toLowerCase())} 
+            placeholder={`Search for ${filterCriteria === 'department' || 'name' ? 'a' : 'an'} ${filterCriteria}`}
+          />
+          <Form.Select onChange={(e) => setFilterCriteria(e.target.value)}>
+            <option value="name">Name</option>
+            <option value="username">Username</option>
+            <option value="email">Email</option>
+            <option value="department">Department</option>
+          </Form.Select>
+        </InputGroup>
         <table className="table border shadow">
           <thead>
             <tr>
@@ -36,37 +52,44 @@ export default function Home() {
             </tr>
           </thead>
           <tbody>
-            {users.map((user, index) => (
-              <tr>
-                <th scope="row" key={index}>
-                  {index + 1}
-                </th>
-                <td>{user.name}</td>
-                <td>{user.username}</td>
-                <td>{user.email}</td>
-                <td>{user.department}</td>
-                <td>
-                  <Link
-                    className="btn btn-primary mx-2"
-                    to={`/viewuser/${user.id}`}
-                  >
-                    View
-                  </Link>
-                  <Link
-                    className="btn btn-outline-primary mx-2"
-                    to={`/edituser/${user.id}`}
-                  >
-                    Edit
-                  </Link>
-                  <button
-                    className="btn btn-danger mx-2"
-                    onClick={() => deleteUser(user.id)}
-                  >
-                    Delete
-                  </button>
-                </td>
-              </tr>
-            ))}
+            {users
+              .filter((filteredUser) => {
+                const searchTerm = search.trim().toLowerCase();
+                const filterValue = filteredUser[filterCriteria].toLowerCase();
+                return (
+                  searchTerm === "" ||
+                  filterValue.includes(searchTerm)
+                );
+              })
+              .map((user, index) => (
+                <tr key={index}>
+                  <th scope="row">{index + 1}</th>
+                  <td>{user.name}</td>
+                  <td>{user.username}</td>
+                  <td>{user.email}</td>
+                  <td>{user.department}</td>
+                  <td>
+                    <Link
+                      className="btn btn-primary mx-2"
+                      to={`/viewuser/${user.id}`}
+                    >
+                      View
+                    </Link>
+                    <Link
+                      className="btn btn-outline-primary mx-2"
+                      to={`/edituser/${user.id}`}
+                    >
+                      Edit
+                    </Link>
+                    <button
+                      className="btn btn-danger mx-2"
+                      onClick={() => deleteUser(user.id)}
+                    >
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              ))}
           </tbody>
         </table>
       </div>
