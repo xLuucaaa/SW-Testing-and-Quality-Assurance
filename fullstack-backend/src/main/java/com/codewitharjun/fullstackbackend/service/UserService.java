@@ -40,8 +40,10 @@ public class UserService {
             }).orElseThrow(() -> new UserNotFoundException(id));
     }
 
-    public List<User> getSortedItems(String sortBy) {
-        Sort sort = Sort.by(sortBy);
+    public List<User> getSortedItems(String sortBy, String sortDirection) {
+        Sort.Direction direction = sortDirection.equals("asc") ? Sort.Direction.ASC : Sort.Direction.DESC;
+
+        Sort sort = Sort.by(direction, sortBy);
         return _userRepository.findAll(sort);
     }
 

@@ -9,26 +9,36 @@ export default function Home() {
   const [search, setSearch] = useState("");
   const [filterCriteria, setFilterCriteria] = useState("name"); 
   const [sortCriteria, setSortCriteria] = useState("id");
+  const [sortDirection, setSortDirection] = useState("asc");
 
   const { id } = useParams();
 
   useEffect(() => {
     loadSortedUsers();
-  }, [sortCriteria]);
+  }, [sortCriteria, sortDirection]);
 
   const loadSortedUsers = async () => {
     let url = `http://localhost:8080/users`;
 
     if (sortCriteria) {
-      url += `?sortBy=${sortCriteria}`;
+      url += `?sortBy=${sortCriteria}&sortDirection=${sortDirection}`;
     }
-
     const result = await axios.get(url);
+    console.log(result);
     setUsers(result.data);
   };
 
   const handleSortClick = (sortBy) => {
-    setSortCriteria(sortBy);
+    if (sortCriteria === sortBy) {
+      // Toggle between ascending and descending when the same column is clicked
+      setSortDirection((prevDirection) =>
+        prevDirection === "asc" ? "desc" : "asc"
+      );
+    } else {
+      // Set to ascending if a new column is clicked
+      setSortCriteria(sortBy);
+      setSortDirection("asc");
+    }
   };
 
   const deleteUser = async (id) => {
