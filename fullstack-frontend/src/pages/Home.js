@@ -54,24 +54,20 @@ export default function Home() {
         <table className="table border shadow">
           <thead>
             <tr>
-              <th scope="col">S.N</th>
               <th scope="col">
-                <button onClick={() => handleSortClick("name")}>
-                  Name
-                </button>
+                <button onClick={() => handleSortClick("id")}>S.N</button>
               </th>
               <th scope="col">
-                <button onClick={() => handleSortClick("username")}>
-                  Username
-                </button>
+                <button onClick={() => handleSortClick("name")}>Name</button>
+              </th>
+              <th scope="col">
+                <button onClick={() => handleSortClick("username")}>Username</button>
               </th>
               <th scope="col">
                 <button onClick={() => handleSortClick("email")}>Email</button>
               </th>
               <th scope="col">
-                <button onClick={() => handleSortClick("department")}>
-                  Department
-                </button>
+                <button onClick={() => handleSortClick("department")}>Department</button>
               </th>
               <th scope="col">Action</th>
             </tr>
@@ -88,7 +84,7 @@ export default function Home() {
               })
               .map((user, index) => (
                 <tr key={index}>
-                  <th scope="row">{index + 1}</th>
+                  <th scope="row">{user.id}</th>
                   <td>{user.name}</td>
                   <td>{user.username}</td>
                   <td>{user.email}</td>
