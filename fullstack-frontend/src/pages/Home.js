@@ -7,7 +7,7 @@ import Form from "react-bootstrap/Form";
 export default function Home() {
   const [users, setUsers] = useState([]);
   const [search, setSearch] = useState("");
-  const [filterCriteria, setFilterCriteria] = useState("name"); 
+  const [filterCriteria, setFilterCriteria] = useState("name");
   const [sortCriteria, setSortCriteria] = useState("id");
   const [sortDirection, setSortDirection] = useState("asc");
 
@@ -41,6 +41,13 @@ export default function Home() {
     }
   };
 
+  const renderSortArrow = (column) => {
+    if (sortCriteria === column) {
+      return sortDirection === "asc" ? " ▲" : " ▼";
+    }
+    return "";
+  };
+
   const deleteUser = async (id) => {
     await axios.delete(`http://localhost:8080/user/${id}`);
     loadSortedUsers();
@@ -50,9 +57,11 @@ export default function Home() {
     <div className="container">
       <div className="py-4">
         <InputGroup>
-          <Form.Control 
-            onChange={(e) => setSearch(e.target.value.toLowerCase())} 
-            placeholder={`Search for ${filterCriteria === 'department' || 'name' ? 'a' : 'an'} ${filterCriteria}`}
+          <Form.Control
+            onChange={(e) => setSearch(e.target.value.toLowerCase())}
+            placeholder={`Search for ${
+              filterCriteria === "department" || "name" ? "a" : "an"
+            } ${filterCriteria}`}
           />
           <Form.Select onChange={(e) => setFilterCriteria(e.target.value)}>
             <option value="name">Name</option>
@@ -65,20 +74,31 @@ export default function Home() {
           <thead>
             <tr>
               <th scope="col">
-                <button onClick={() => handleSortClick("id")}>S.N</button>
+                <button onClick={() => handleSortClick("id")}>
+                  S.N{renderSortArrow("id")}
+                </button>
               </th>
               <th scope="col">
-                <button onClick={() => handleSortClick("name")}>Name</button>
+                <button onClick={() => handleSortClick("name")}>
+                  Name{renderSortArrow("name")}
+                </button>
               </th>
               <th scope="col">
-                <button onClick={() => handleSortClick("username")}>Username</button>
+                <button onClick={() => handleSortClick("username")}>
+                  Username{renderSortArrow("username")}
+                </button>
               </th>
               <th scope="col">
-                <button onClick={() => handleSortClick("email")}>Email</button>
+                <button onClick={() => handleSortClick("email")}>
+                  Email{renderSortArrow("email")}
+                </button>
               </th>
               <th scope="col">
-                <button onClick={() => handleSortClick("department")}>Department</button>
+                <button onClick={() => handleSortClick("department")}d>
+                  Department{renderSortArrow("department")}
+                </button>
               </th>
+
               <th scope="col">Action</th>
             </tr>
           </thead>
@@ -87,10 +107,7 @@ export default function Home() {
               .filter((filteredUser) => {
                 const searchTerm = search.trim().toLowerCase();
                 const filterValue = filteredUser[filterCriteria].toLowerCase();
-                return (
-                  searchTerm === "" ||
-                  filterValue.includes(searchTerm)
-                );
+                return searchTerm === "" || filterValue.includes(searchTerm);
               })
               .map((user, index) => (
                 <tr key={index}>
