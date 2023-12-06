@@ -8,21 +8,32 @@ export default function Home() {
   const [users, setUsers] = useState([]);
   const [search, setSearch] = useState("");
   const [filterCriteria, setFilterCriteria] = useState("name"); 
+  const [sortCriteria, setSortCriteria] = useState("id");
 
   const { id } = useParams();
 
   useEffect(() => {
-    loadUsers();
-  }, []);
+    loadSortedUsers();
+  }, [sortCriteria]);
 
-  const loadUsers = async () => {
-    const result = await axios.get("http://localhost:8080/users");
+  const loadSortedUsers = async () => {
+    let url = `http://localhost:8080/users`;
+
+    if (sortCriteria) {
+      url += `?sortBy=${sortCriteria}`;
+    }
+
+    const result = await axios.get(url);
     setUsers(result.data);
+  };
+
+  const handleSortClick = (sortBy) => {
+    setSortCriteria(sortBy);
   };
 
   const deleteUser = async (id) => {
     await axios.delete(`http://localhost:8080/user/${id}`);
-    loadUsers();
+    loadSortedUsers();
   };
 
   return (
@@ -44,10 +55,24 @@ export default function Home() {
           <thead>
             <tr>
               <th scope="col">S.N</th>
-              <th scope="col">Name</th>
-              <th scope="col">Username</th>
-              <th scope="col">Email</th>
-              <th scope="col">Department</th>
+              <th scope="col">
+                <button onClick={() => handleSortClick("name")}>
+                  Name
+                </button>
+              </th>
+              <th scope="col">
+                <button onClick={() => handleSortClick("username")}>
+                  Username
+                </button>
+              </th>
+              <th scope="col">
+                <button onClick={() => handleSortClick("email")}>Email</button>
+              </th>
+              <th scope="col">
+                <button onClick={() => handleSortClick("department")}>
+                  Department
+                </button>
+              </th>
               <th scope="col">Action</th>
             </tr>
           </thead>
