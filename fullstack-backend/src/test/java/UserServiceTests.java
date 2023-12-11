@@ -170,7 +170,6 @@ class UserServiceTests {
 
         verify(userRepository, times(1)).existsById(userId);
         verify(userRepository, times(1)).deleteById(userId);
-
     }
 
     @Test
