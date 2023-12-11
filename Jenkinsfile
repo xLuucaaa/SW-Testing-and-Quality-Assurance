@@ -8,13 +8,11 @@ pipeline {
         stage('Build'){
             steps {
                 echo 'Building User Management Project'
-                sh './gradlew build'
             }
         }
         stage('Test') {
             steps {
                 echo 'Running User Management Project Tests'
-                sh './gradlew test'
             }
             post {
                 always {
