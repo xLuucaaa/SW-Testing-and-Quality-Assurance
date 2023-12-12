@@ -16,8 +16,8 @@ public class UserController {
     }
 
     @GetMapping("/users")
-    List<User> getAllUsersSorted(@RequestParam String sortBy, @RequestParam String sortDirection) {
-        return _userService.getSortedItems(sortBy, sortDirection);
+    List<User> getAllUsers() {
+        return _userService.getAll();
     }
 
     @GetMapping("/user/{id}")
@@ -38,5 +38,10 @@ public class UserController {
     @DeleteMapping("/user/{id}")
     String deleteUser(@PathVariable Long id){
         return _userService.delete(id);
+    }
+
+    @GetMapping("/users/sort")
+    List<User> getAllUsersSorted(@RequestParam String sortBy, @RequestParam String sortDirection) {
+        return _userService.sort(sortBy, sortDirection);
     }
 }
