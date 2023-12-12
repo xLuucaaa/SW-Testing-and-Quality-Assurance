@@ -18,7 +18,7 @@ export default function Home() {
   }, [sortCriteria, sortDirection]);
 
   const loadSortedUsers = async () => {
-    let url = `http://localhost:8080/users`;
+    let url = `http://localhost:8080/users/sort`;
 
     if (sortCriteria) {
       url += `?sortBy=${sortCriteria}&sortDirection=${sortDirection}`;
@@ -93,7 +93,7 @@ export default function Home() {
                 </button>
               </th>
               <th scope="col">
-                <button onClick={() => handleSortClick("department")}d>
+                <button onClick={() => handleSortClick("department")} d>
                   Department{renderSortArrow("department")}
                 </button>
               </th>
