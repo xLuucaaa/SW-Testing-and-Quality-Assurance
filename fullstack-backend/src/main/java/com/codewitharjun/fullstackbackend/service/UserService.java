@@ -7,7 +7,6 @@ import com.codewitharjun.fullstackbackend.exception.UserNotFoundException;
 import java.util.List;
 import org.springframework.data.domain.Sort;
 
-
 @Service
 public class UserService {
     private final UserRepository _userRepository;
@@ -40,13 +39,6 @@ public class UserService {
             }).orElseThrow(() -> new UserNotFoundException(id));
     }
 
-    public List<User> getSortedItems(String sortBy, String sortDirection) {
-        Sort.Direction direction = sortDirection.equals("asc") ? Sort.Direction.ASC : Sort.Direction.DESC;
-
-        Sort sort = Sort.by(direction, sortBy);
-        return _userRepository.findAll(sort);
-    }
-
     public String delete(Long id) {
         if(!_userRepository.existsById(id)){
             throw new UserNotFoundException(id);
@@ -54,5 +46,12 @@ public class UserService {
         _userRepository.deleteById(id);
 
         return "User with id " + id + " has been deleted successfully.";
+    }
+
+    public List<User> sort(String sortBy, String sortDirection) {
+        Sort.Direction direction = sortDirection.equals("asc") ? Sort.Direction.ASC : Sort.Direction.DESC;
+        Sort sort = Sort.by(direction, sortBy);
+
+        return _userRepository.findAll(sort);
     }
 }
