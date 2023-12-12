@@ -18,6 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import java.util.List;
+import java.util.Arrays;
 
 public class UserControllerTests {
     private MockMvc mockMvc;
@@ -202,6 +203,51 @@ public class UserControllerTests {
         assertEquals("Could not find the user with id 1", thrownException.getCause().getMessage());
 
         verify(userService, times(1)).delete(1L);
+        verifyNoMoreInteractions(userService);
+    }
+
+    @Test
+    public void getAllUsersSortedAPI_Success() throws Exception {
+        String sortBy = "name";
+        String sortDirection = "asc";
+
+        User alice = new User() {{
+            setId(1L);
+            setUsername("alice_user");
+            setName("Alice");
+            setEmail("alice@example.com");
+            setDepartment("HR");
+        }};
+        User bob = new User() {{
+            setId(2L);
+            setUsername("bob_user");
+            setName("Bob");
+            setEmail("bob@example.com");
+            setDepartment("IT");
+        }};
+        User charlie = new User() {{
+            setId(3L);
+            setUsername("charlie_user");
+            setName("Charlie");
+            setEmail("charlie@example.com");
+            setDepartment("Finance");
+        }};
+
+        List<User> expectedSortedUsers = Arrays.asList(alice, bob, charlie);
+
+        when(userService.sort(sortBy, sortDirection)).thenReturn(expectedSortedUsers);
+
+        mockMvc.perform(get("/users/sort")
+                .param("sortBy", sortBy)
+                .param("sortDirection", sortDirection))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").isArray())
+                .andExpect(jsonPath("$", hasSize(3)))
+                .andExpect(jsonPath("$[0].name").value("Alice"))
+                .andExpect(jsonPath("$[1].name").value("Bob"))
+                .andExpect(jsonPath("$[2].name").value("Charlie"));
+
+        verify(userService, times(1)).sort(sortBy, sortDirection);
         verifyNoMoreInteractions(userService);
     }
 }

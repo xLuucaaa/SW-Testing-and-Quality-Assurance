@@ -8,12 +8,14 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.ArgumentCaptor;
 import org.mockito.MockitoAnnotations;
+import org.springframework.data.domain.Sort;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import java.util.List;
+import java.util.Arrays;
 import java.util.Optional;
 
-class UserServiceTests {
+public class UserServiceTests {
     @Mock
     private UserRepository userRepository;
 
@@ -23,7 +25,7 @@ class UserServiceTests {
     private List<User> users;
 
     @BeforeEach
-    void setUp() {
+    public void setUp() {
         MockitoAnnotations.openMocks(this);
 
         users = List.of(
@@ -45,7 +47,7 @@ class UserServiceTests {
     }
 
     @Test
-    void getAllUsers() {
+    public void getAllUsers_Success() {
         when(userRepository.findAll()).thenReturn(users);
 
         List<User> result = userService.getAll();
@@ -66,7 +68,7 @@ class UserServiceTests {
     }
 
     @Test
-    void getExistingUserById() {
+    public void getUserById_Success() {
         Long userId = 1L;
         User expectedUser = users.get(0);
 
@@ -83,7 +85,7 @@ class UserServiceTests {
     }
 
     @Test
-    void getNonExistingUserById() {
+    public void getUserById_UserNotFound() {
         Long userId = 4L;
 
         when(userRepository.findById(userId)).thenReturn(Optional.empty());
@@ -94,7 +96,7 @@ class UserServiceTests {
     }
 
     @Test
-    void addUser() {
+    public void addUser_Success() {
         User user = new User() {{
             setId(3L);
             setUsername("user3");
@@ -117,7 +119,7 @@ class UserServiceTests {
     }
 
     @Test
-    void updateExistingUser() {
+    public void updateUser_Success() {
         Long userId = 1L;
         User existingUser = users.get(0);
 
@@ -147,7 +149,7 @@ class UserServiceTests {
     }
 
     @Test
-    void updateNonExistingUser() {
+    public void updateUser_UserNotFound() {
         Long userId = 4L;
 
         when(userRepository.findById(userId)).thenReturn(Optional.empty());
@@ -159,7 +161,7 @@ class UserServiceTests {
     }
 
     @Test
-    void deleteExistingUser() {
+    public void deleteUser_Success() {
         Long userId = 1L;
 
         when(userRepository.existsById(userId)).thenReturn(true);
@@ -173,7 +175,7 @@ class UserServiceTests {
     }
 
     @Test
-    void deleteNonExistingUser() {
+    public void deleteUser_UserNotFound() {
         Long userId = 4L;
 
         when(userRepository.existsById(userId)).thenReturn(false);
@@ -182,5 +184,44 @@ class UserServiceTests {
 
         verify(userRepository, times(1)).existsById(userId);
         verify(userRepository, never()).delete(any(User.class));
+    }
+
+    @Test
+    public void sortAllUsers_Success() {
+        String sortBy = "name";
+        String sortDirection = "asc";
+
+        User alice = new User() {{
+            setId(1L);
+            setUsername("alice_user");
+            setName("Alice");
+            setEmail("alice@example.com");
+            setDepartment("HR");
+        }};
+        User bob = new User() {{
+            setId(2L);
+            setUsername("bob_user");
+            setName("Bob");
+            setEmail("bob@example.com");
+            setDepartment("IT");
+        }};
+        User charlie = new User() {{
+            setId(3L);
+            setUsername("charlie_user");
+            setName("Charlie");
+            setEmail("charlie@example.com");
+            setDepartment("Finance");
+        }};
+
+        List<User> expectedSortedUsers = Arrays.asList(alice, bob, charlie);
+
+        when(userRepository.findAll(Sort.by(Sort.Direction.ASC, sortBy))).thenReturn(expectedSortedUsers);
+
+        List<User> sortedUsers = userService.sort(sortBy, sortDirection);
+
+        assertEquals(expectedSortedUsers, sortedUsers);
+
+        verify(userRepository, times(1)).findAll(Sort.by(Sort.Direction.ASC, sortBy));
+        verifyNoMoreInteractions(userRepository);
     }
 }
