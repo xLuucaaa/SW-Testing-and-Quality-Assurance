@@ -16,8 +16,8 @@ public class UserController {
     }
 
     @GetMapping("/users")
-    List<User> getAllUsers() {
-        return _userService.getAll();
+    List<User> getAllUsersSorted(@RequestParam String sortBy, @RequestParam String sortDirection) {
+        return _userService.getSortedItems(sortBy, sortDirection);
     }
 
     @GetMapping("/user/{id}")

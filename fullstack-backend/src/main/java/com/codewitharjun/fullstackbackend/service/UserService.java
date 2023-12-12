@@ -5,6 +5,8 @@ import com.codewitharjun.fullstackbackend.model.User;
 import com.codewitharjun.fullstackbackend.repository.UserRepository;
 import com.codewitharjun.fullstackbackend.exception.UserNotFoundException;
 import java.util.List;
+import org.springframework.data.domain.Sort;
+
 
 @Service
 public class UserService {
@@ -36,6 +38,13 @@ public class UserService {
                 u.setDepartment(user.getDepartment());
                 return _userRepository.save(user);
             }).orElseThrow(() -> new UserNotFoundException(id));
+    }
+
+    public List<User> getSortedItems(String sortBy, String sortDirection) {
+        Sort.Direction direction = sortDirection.equals("asc") ? Sort.Direction.ASC : Sort.Direction.DESC;
+
+        Sort sort = Sort.by(direction, sortBy);
+        return _userRepository.findAll(sort);
     }
 
     public String delete(Long id) {

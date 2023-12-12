@@ -7,31 +7,60 @@ import Form from "react-bootstrap/Form";
 export default function Home() {
   const [users, setUsers] = useState([]);
   const [search, setSearch] = useState("");
-  const [filterCriteria, setFilterCriteria] = useState("name"); 
+  const [filterCriteria, setFilterCriteria] = useState("name");
+  const [sortCriteria, setSortCriteria] = useState("id");
+  const [sortDirection, setSortDirection] = useState("asc");
 
   const { id } = useParams();
 
   useEffect(() => {
-    loadUsers();
-  }, []);
+    loadSortedUsers();
+  }, [sortCriteria, sortDirection]);
 
-  const loadUsers = async () => {
-    const result = await axios.get("http://localhost:8080/users");
+  const loadSortedUsers = async () => {
+    let url = `http://localhost:8080/users`;
+
+    if (sortCriteria) {
+      url += `?sortBy=${sortCriteria}&sortDirection=${sortDirection}`;
+    }
+    const result = await axios.get(url);
     setUsers(result.data);
+  };
+
+  const handleSortClick = (sortBy) => {
+    if (sortCriteria === sortBy) {
+      // Toggle between ascending and descending when the same column is clicked
+      setSortDirection((prevDirection) =>
+        prevDirection === "asc" ? "desc" : "asc"
+      );
+    } else {
+      // Set to ascending if a new column is clicked
+      setSortCriteria(sortBy);
+      setSortDirection("asc");
+    }
+  };
+
+  const renderSortArrow = (column) => {
+    if (sortCriteria === column) {
+      return sortDirection === "asc" ? " ▲" : " ▼";
+    }
+    return "";
   };
 
   const deleteUser = async (id) => {
     await axios.delete(`http://localhost:8080/user/${id}`);
-    loadUsers();
+    loadSortedUsers();
   };
 
   return (
     <div className="container">
       <div className="py-4">
         <InputGroup>
-          <Form.Control 
-            onChange={(e) => setSearch(e.target.value.toLowerCase())} 
-            placeholder={`Search for ${filterCriteria === 'department' || 'name' ? 'a' : 'an'} ${filterCriteria}`}
+          <Form.Control
+            onChange={(e) => setSearch(e.target.value.toLowerCase())}
+            placeholder={`Search for ${
+              filterCriteria === "department" || "name" ? "a" : "an"
+            } ${filterCriteria}`}
           />
           <Form.Select onChange={(e) => setFilterCriteria(e.target.value)}>
             <option value="name">Name</option>
@@ -43,11 +72,32 @@ export default function Home() {
         <table className="table border shadow">
           <thead>
             <tr>
-              <th scope="col">S.N</th>
-              <th scope="col">Name</th>
-              <th scope="col">Username</th>
-              <th scope="col">Email</th>
-              <th scope="col">Department</th>
+              <th scope="col">
+                <button onClick={() => handleSortClick("id")}>
+                  S.N{renderSortArrow("id")}
+                </button>
+              </th>
+              <th scope="col">
+                <button onClick={() => handleSortClick("name")}>
+                  Name{renderSortArrow("name")}
+                </button>
+              </th>
+              <th scope="col">
+                <button onClick={() => handleSortClick("username")}>
+                  Username{renderSortArrow("username")}
+                </button>
+              </th>
+              <th scope="col">
+                <button onClick={() => handleSortClick("email")}>
+                  Email{renderSortArrow("email")}
+                </button>
+              </th>
+              <th scope="col">
+                <button onClick={() => handleSortClick("department")}d>
+                  Department{renderSortArrow("department")}
+                </button>
+              </th>
+
               <th scope="col">Action</th>
             </tr>
           </thead>
@@ -56,14 +106,11 @@ export default function Home() {
               .filter((filteredUser) => {
                 const searchTerm = search.trim().toLowerCase();
                 const filterValue = filteredUser[filterCriteria].toLowerCase();
-                return (
-                  searchTerm === "" ||
-                  filterValue.includes(searchTerm)
-                );
+                return searchTerm === "" || filterValue.includes(searchTerm);
               })
               .map((user, index) => (
                 <tr key={index}>
-                  <th scope="row">{index + 1}</th>
+                  <th scope="row">{user.id}</th>
                   <td>{user.name}</td>
                   <td>{user.username}</td>
                   <td>{user.email}</td>
